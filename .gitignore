@@ -1,0 +1,10 @@
+## Pastas a serem ignoradas pelo Git
+
+target/
+.settings/
+exemplo/
+
+## Arquivos a serem ignorados pelo Git
+
+.classpath
+.project
