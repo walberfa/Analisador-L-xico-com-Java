@@ -2,10 +2,8 @@
 
 target/
 .settings/
-exemplo/
 
 ## Arquivos a serem ignorados pelo Git
 
 .classpath
 .project
-exemplo/*.lex
