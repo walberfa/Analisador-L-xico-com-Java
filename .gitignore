@@ -2,7 +2,6 @@
 
 target/
 .settings/
-exemplo/
 
 ## Arquivos a serem ignorados pelo Git
 

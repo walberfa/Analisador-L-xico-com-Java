@@ -3,8 +3,8 @@ Projeto para a disciplina de Compiladores do curso de Ciência da Computação.
 
 <h2> Equipe </h2>
 
- Walber Florencio
+- Walber Florencio
 
-Lamartine Queiroga
+- Lamartine Queiroga
 
-Hélio Lopes
+- Hélio Lopes
