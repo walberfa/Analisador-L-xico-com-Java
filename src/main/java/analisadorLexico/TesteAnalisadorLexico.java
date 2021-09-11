@@ -5,7 +5,7 @@ import java.io.StringReader;
 
 public class TesteAnalisadorLexico {
 	public static void main(String[] args) {
-		String expr = "if 2 + 3 a then";
+		String expr = "String teste; int perto = 5 + 1;";
 
 		LexicalAnalyzer lexAn = new LexicalAnalyzer(new StringReader(expr));
 

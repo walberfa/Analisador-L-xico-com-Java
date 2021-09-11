@@ -5,9 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 
-import jflex.exceptions.SilentExit;
+import jflex.SilentExit;
 
 
 public class Generator {
@@ -36,7 +37,7 @@ public class Generator {
 		
 		LexicalAnalyzer lexical;
 		try {
-			lexical = new LexicalAnalyzer(new FileReader(input));
+			lexical = new LexicalAnalyzer(new FileReader(input, StandardCharsets.UTF_8));
 			try {
 				lexical.yylex();
 			} catch (IOException e) {
@@ -46,6 +47,8 @@ public class Generator {
 		} catch (FileNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }
