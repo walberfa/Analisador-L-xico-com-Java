@@ -9,9 +9,18 @@ public class ArquivoLex {
 	public File lexDir;
 	public File lexFile;
 
+	/******
+	 * basdfadf ******** asdgasd
+	 * 
+	 *
+	 * saas
+	 ****/
 	public ArquivoLex() {
 		String bob = "//";
 		/* Criando o arquivo .lex caso não exista. Se existir, ainda referencia-o. */
+		
+		// Esse ´é um comentário de teste-chan
+		
 		String rootPath = Paths.get("").toAbsolutePath().toString();
 		String subPath = "\\exemplo\\";
 		String filePath = rootPath + subPath;

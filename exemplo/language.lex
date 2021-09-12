@@ -70,7 +70,7 @@ CONST_MATRIZ = {ABRE_CHAVE}((({CONST_ARRAY}|{ID})(" ")*{VIRGULA}(" ")*)*({CONST_
 
 METODO = {ID}{ABRE_PARENTESE}({ANY_CHAR})*{FECHA_PARENTESE}
 
-COMENTARIO = ("//"({ANY_CHAR})*)|("/*"({ANY_CHAR})*"*/")
+COMENTARIO = (["//"]({ANY_CHAR})*)|("/*"([^*]|\*+[^*/])*\*+"/")
 
 %%
 
