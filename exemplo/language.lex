@@ -1,12 +1,35 @@
 package analisadorLexico;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Paths;
 %%
 
 %{
+  private File output;
+  private FileWriter writer;
 
-private void imprimir(String descricao, String lexema) {
+  public void fecharOutput() throws IOException {
+    this.writer.close();
+  }
+
+
+  private void imprimir(String descricao, String lexema) throws IOException {
     System.out.println(lexema + " - " + descricao);
-}
+    this.writer.append(lexema + " - " + descricao + "\n");
+  }
+
+  LexicalAnalyzer(java.io.Reader in, String inputname) throws IOException {
+	String rootPath = Paths.get("").toAbsolutePath().toString();
+	this.output = new File(rootPath + "\\" + inputname +" - output.txt");
+	output.delete();
+	output.createNewFile();
+	this.writer = new FileWriter(this.output);
+	this.zzReader = in;
+  }
+
+
 
 %}
 
@@ -28,6 +51,8 @@ EXCECAO = "catch"|"finally"|"throw"|"throws"|"try"
 ACESSO = "default"|"private"|"protected"|"public"
 TIPO_STRING = "String"
 OP_INSTANCIA = "instanceof"
+OP_ANOTACAO = "@"
+ANOTACAO = {OP_ANOTACAO}{ANY_CHAR}*
 
 ESCAPE = ["\t"|"\b"|"\n"|"\r"|"\f"|"\'"|"\""|"\\"]
 BRANCO = [\n|\s|\t|\r]+
@@ -62,16 +87,16 @@ FLOAT = ({INTEIRO})?{PONTO}{NUM}
 
 CONSTANTE = {LITERAL}|{CHAR}|{STRING}|{INTEIRO}|{FLOAT}
 
-DEC_ARRAY = {TIPO}{ABRE_COLCHETE}{FECHA_COLCHETE}
-DEC_MATRIZ = {TIPO}{ABRE_COLCHETE}{NUM}?{FECHA_COLCHETE}{ABRE_COLCHETE}{FECHA_COLCHETE}
+DEC_ARRAY = {TIPO}{BRANCO}*{ID}?{ABRE_COLCHETE}{FECHA_COLCHETE}
+DEC_MATRIZ = {TIPO}{BRANCO}*{ID}?{ABRE_COLCHETE}{NUM}?{FECHA_COLCHETE}{ABRE_COLCHETE}{FECHA_COLCHETE}
 
 POS_ARRAY = {ID}{ABRE_COLCHETE}{NUM}{FECHA_COLCHETE}
 POS_MATRIZ = {ID}{ABRE_COLCHETE}{NUM}{FECHA_COLCHETE}{ABRE_COLCHETE}{NUM}{FECHA_COLCHETE}
 
-CONST_ARRAY = {ABRE_CHAVE}((({CONSTANTE}|{ID})(" ")*{VIRGULA}(" ")*)*({CONSTANTE}|{ID}))?{FECHA_CHAVE}
+CONST_ARRAY = {ABRE_CHAVE}{BRANCO}*((({CONSTANTE}|{ID}){BRANCO}*{VIRGULA}{BRANCO}*)*({CONSTANTE}|{ID}))?{BRANCO}*{FECHA_CHAVE}
 CONST_MATRIZ = {ABRE_CHAVE}((({CONST_ARRAY}|{ID})(" ")*{VIRGULA}(" ")*)*({CONST_ARRAY}|{ID}))?{FECHA_CHAVE}
 
-METODO = {ID}{ABRE_PARENTESE}({ANY_CHAR})*{FECHA_PARENTESE}
+METODO = {ID}{ABRE_PARENTESE}
 
 COMENTARIO = (["//"]({ANY_CHAR})*)|("/*"([^*]|\*+[^*/])*\*+"/")
 
@@ -98,7 +123,7 @@ COMENTARIO = (["//"]({ANY_CHAR})*)|("/*"([^*]|\*+[^*/])*\*+"/")
 {PONTO}							{ imprimir("Separador ponto", yytext()); }
 {DOIS_PONTOS}					{ imprimir("Separador dois-pontos", yytext()); }
 {PONTO_E_VIRGULA}				{ imprimir("Separador ponto e vírgula", yytext()); }
-{BRANCO}                    	{ imprimir("Espaço em branco", yytext()); }
+{BRANCO}                    	{}
 {DEC_MATRIZ}					{ imprimir("Declaração de matriz", yytext()); }
 {DEC_ARRAY}						{ imprimir("Declaração de array", yytext()); }
 {POS_MATRIZ}					{ imprimir("Posição da matriz", yytext()); }
@@ -111,12 +136,14 @@ COMENTARIO = (["//"]({ANY_CHAR})*)|("/*"([^*]|\*+[^*/])*\*+"/")
 {OP_BIT}						{ imprimir("Operador de bits", yytext()); }
 {OP_SHIFT}						{ imprimir("Operador de shift", yytext()); }
 {OP_UNARIO}						{ imprimir("Operador unário", yytext()); }
-{OP_TERNARIO}					{ imprimir("Operador ternário", yytext()); }
+{OP_TERNARIO}					{ imprimir("Operador ternáio", yytext()); }
 {OP_COMPARATIVO}				{ imprimir("Operador comparativo", yytext()); }
 {INTEIRO}              		    { imprimir("Constante tipo número inteiro", yytext()); }
 {CHAR}							{ imprimir("Constante tipo char", yytext()); }
 {FLOAT}							{ imprimir("Constante tipo float", yytext()); }
 {STRING}						{ imprimir("Constante tipo string", yytext()); }
+{ANOTACAO}						{ imprimir("Anotação do java", yytext()); }
+{VIRGULA}						{ imprimir("Separador vírgula", yytext()); }
 {ID}                	        { imprimir("Identificador", yytext()); }
 
 . { throw new RuntimeException("Caractere inválido " + yytext()); }
