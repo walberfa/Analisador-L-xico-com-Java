@@ -136,7 +136,7 @@ COMENTARIO = (["//"]({ANY_CHAR})*)|("/*"([^*]|\*+[^*/])*\*+"/")
 {OP_BIT}						{ imprimir("Operador de bits", yytext()); }
 {OP_SHIFT}						{ imprimir("Operador de shift", yytext()); }
 {OP_UNARIO}						{ imprimir("Operador unário", yytext()); }
-{OP_TERNARIO}					{ imprimir("Operador ternáio", yytext()); }
+{OP_TERNARIO}					{ imprimir("Operador ternário", yytext()); }
 {OP_COMPARATIVO}				{ imprimir("Operador comparativo", yytext()); }
 {INTEIRO}              		    { imprimir("Constante tipo número inteiro", yytext()); }
 {CHAR}							{ imprimir("Constante tipo char", yytext()); }
