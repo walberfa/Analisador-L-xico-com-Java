@@ -806,7 +806,6 @@ class LexicalAnalyzer {
     this.writer.close();
   }
 
-
   private void imprimir(String descricao, String lexema) throws IOException {
     System.out.println(lexema + " - " + descricao);
     this.writer.append(lexema + " - " + descricao + "\n");
@@ -1236,7 +1235,7 @@ class LexicalAnalyzer {
             // fall through
           case 57: break;
           case 16:
-            { imprimir("Operador ternáio", yytext());
+            { imprimir("Operador ternário", yytext());
             }
             // fall through
           case 58: break;
