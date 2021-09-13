@@ -27,14 +27,17 @@ LOOP = "for"|"while"|"do"
 EXCECAO = "catch"|"finally"|"throw"|"throws"|"try"
 ACESSO = "default"|"private"|"protected"|"public"
 TIPO_STRING = "String"
+OP_INSTANCIA = "instanceof"
 
 ESCAPE = ["\t"|"\b"|"\n"|"\r"|"\f"|"\'"|"\""|"\\"]
-BRANCO = [\n| |\t|\r]
+BRANCO = [\n|\s|\t|\r]+
 ASPA_SIMPLES = [']
 ASPA_DUPLA = \"
 PONTO = \.
 ANY_CHAR = .
 VIRGULA = ","
+OP_TERNARIO = "?"
+DOIS_PONTOS = ":"
 PONTO_E_VIRGULA = ";"
 ABRE_PARENTESE = "("
 FECHA_PARENTESE = ")"
@@ -42,13 +45,13 @@ ABRE_COLCHETE = "["
 FECHA_COLCHETE = "]"
 ABRE_CHAVE = "{"
 FECHA_CHAVE = "}"
-OP_ATRIBUICAO = "="
+OP_ATRIBUICAO = ({OP_ARITMETICO}|{OP_SHIFT}|{OP_BIT})?"="
 OP_ARITMETICO = "+"|"-"|"*"|"/"|"%"
-OP_COMPARATIVO = "<"|">"|"<="|">="|"=="|"!="
+OP_COMPARATIVO = "<"|">"|"<="|">="|"=="|"!="|{OP_INSTANCIA}
 OP_LOGICO = "&&"|"||"|"!"
-OP_UNARIO = "++"|"--"
-OP_BIT = "<<"|">>"|">>>"
-
+OP_UNARIO = "++"|"--"|"~"
+OP_SHIFT = "<<"|">>"|">>>"
+OP_BIT = "&"|"|"|"^"
 ID = [_|a-z|A-Z][a-z|A-Z|0-9|_]*
 
 CHAR = {ASPA_SIMPLES}({ANY_CHAR}|{ESCAPE}){ASPA_SIMPLES}
@@ -92,7 +95,9 @@ COMENTARIO = (["//"]({ANY_CHAR})*)|("/*"([^*]|\*+[^*/])*\*+"/")
 {FECHA_COLCHETE}				{ imprimir("Colchete fechado", yytext()); }
 {ABRE_PARENTESE}				{ imprimir("Parêntese aberto", yytext()); }
 {FECHA_PARENTESE}				{ imprimir("Parêntese fechado", yytext()); }
-{PONTO}							{ imprimir("Operador de ponto", yytext()); }
+{PONTO}							{ imprimir("Separador ponto", yytext()); }
+{DOIS_PONTOS}					{ imprimir("Separador dois-pontos", yytext()); }
+{PONTO_E_VIRGULA}				{ imprimir("Separador ponto e vírgula", yytext()); }
 {BRANCO}                    	{ imprimir("Espaço em branco", yytext()); }
 {DEC_MATRIZ}					{ imprimir("Declaração de matriz", yytext()); }
 {DEC_ARRAY}						{ imprimir("Declaração de array", yytext()); }
@@ -101,11 +106,13 @@ COMENTARIO = (["//"]({ANY_CHAR})*)|("/*"([^*]|\*+[^*/])*\*+"/")
 {CONST_MATRIZ}					{ imprimir("Constante de uma matriz", yytext()); }
 {CONST_ARRAY}					{ imprimir("Constante de um array", yytext()); }
 {OP_ATRIBUICAO}					{ imprimir("Operador de atribuição", yytext()); }
-{PONTO_E_VIRGULA}				{ imprimir("Ponto e vírgula", yytext()); }
 {OP_ARITMETICO}					{ imprimir("Operador aritmético", yytext()); }
 {OP_LOGICO}						{ imprimir("Operador lógico", yytext()); }
 {OP_BIT}						{ imprimir("Operador de bits", yytext()); }
+{OP_SHIFT}						{ imprimir("Operador de shift", yytext()); }
 {OP_UNARIO}						{ imprimir("Operador unário", yytext()); }
+{OP_TERNARIO}					{ imprimir("Operador ternário", yytext()); }
+{OP_COMPARATIVO}				{ imprimir("Operador comparativo", yytext()); }
 {INTEIRO}              		    { imprimir("Constante tipo número inteiro", yytext()); }
 {CHAR}							{ imprimir("Constante tipo char", yytext()); }
 {FLOAT}							{ imprimir("Constante tipo float", yytext()); }
