@@ -34,5 +34,12 @@ public class Analisador {
 			System.out.print("ERRO: ");
 			e1.printStackTrace();
 		}
+		try {
+			System.out.println("Pressione ENTER para sair");
+			System.in.read();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
