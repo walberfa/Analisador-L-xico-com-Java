@@ -45,9 +45,9 @@ KEYWORDS4 = "static"|"strictfp"|"super"|"switch"|"synchronized"|"this"|"throw"|"
 TODAS_KEYWORDS_RESERVADAS = {KEYWORDS1}|{KEYWORDS2}|{KEYWORDS3}|{KEYWORDS4}
 LITERAL = "null"|"false"|"true"
 TIPO = "byte"|"char"|"double"|"float"|"int"|"long"|"short"|"void"
-DESVIO_CONDICIONAL = "case"|"else"|"if"|"switch"
-LOOP = "for"|"while"|"do"
-EXCECAO = "catch"|"finally"|"throw"|"throws"|"try"
+DESVIO_CONDICIONAL_WORD = "case"|"else"|"if"|"switch"
+LOOP_WORD = "for"|"while"|"do"
+EXCECAO_WORD = "catch"|"finally"|"throw"|"throws"|"try"
 ACESSO = "default"|"private"|"protected"|"public"
 TIPO_STRING = "String"
 OP_INSTANCIA = "instanceof"
@@ -81,7 +81,7 @@ ID = [_|a-z|A-Z][a-z|A-Z|0-9|_]*
 
 CHAR = {ASPA_SIMPLES}({ANY_CHAR}|{ESCAPE}){ASPA_SIMPLES}
 STRING = {ASPA_DUPLA}([^\"])*{ASPA_DUPLA}
-NUM = [0|[1-9][0-9]*]
+NUM = "0"|[1-9][0-9]*
 INTEIRO = "\-"?{NUM}
 FLOAT = ({INTEIRO})?{PONTO}{NUM}
 
@@ -96,6 +96,9 @@ POS_MATRIZ = {ID}{BRANCO}*{ABRE_COLCHETE}{BRANCO}*{NUM}{BRANCO}*{FECHA_COLCHETE}
 CONST_ARRAY = {ABRE_CHAVE}{BRANCO}*((({CONSTANTE}|{ID}){BRANCO}*{VIRGULA}{BRANCO}*)*({CONSTANTE}|{ID}))?{BRANCO}*{FECHA_CHAVE}
 CONST_MATRIZ = {ABRE_CHAVE}{BRANCO}*((({CONST_ARRAY}|{ID}){BRANCO}*{VIRGULA}{BRANCO}*)*({CONST_ARRAY}|{ID}))?{BRANCO}*{FECHA_CHAVE}
 
+DESVIO_CONDICIONAL = ("if"|"switch"){BRANCO}*{ABRE_PARENTESE}
+LOOP = ("for"|"while"){BRANCO}*{ABRE_PARENTESE}
+EXCECAO = "catch"{BRANCO}*{ABRE_PARENTESE}
 METODO = {ID}{BRANCO}*{ABRE_PARENTESE}
 
 COMENTARIO = (["//"]({ANY_CHAR})*)|("/*"([^*]|\*+[^*/])*\*+"/")
@@ -103,16 +106,15 @@ COMENTARIO = (["//"]({ANY_CHAR})*)|("/*"([^*]|\*+[^*/])*\*+"/")
 %%
 
 {ACESSO}						{ imprimir("Palavra reservada " + yytext() + " (modificador de acesso)", yytext()); }
-{EXCECAO}						{ imprimir("Palavra reservada " + yytext() + " (exceção)", yytext()); }
-{LOOP}							{ imprimir("Palavra reservada " + yytext() + " (loop)", yytext()); }
-{DESVIO_CONDICIONAL}			{ imprimir("Palavra reservada " + yytext() + " (desvio condicional)", yytext()); }
+{EXCECAO_WORD}					{ imprimir("Palavra reservada " + yytext() + " (exceção)", yytext()); }
+{LOOP_WORD}						{ imprimir("Palavra reservada " + yytext() + " (loop)", yytext()); }
+{DESVIO_CONDICIONAL_WORD}		{ imprimir("Palavra reservada " + yytext() + " (desvio condicional)", yytext()); }
 {TIPO}							{ imprimir("Palavra reservada " + yytext() + " (tipo)", yytext()); }
 {TIPO_STRING}					{ imprimir("Tipo não primitivo " + yytext(), yytext()); }
 {LITERAL}						{ imprimir("Palavra reservada " + yytext() + " (valor literal)", yytext()); }
 {TODAS_KEYWORDS_RESERVADAS}		{ imprimir("Palavra reservada " + yytext(), yytext()); }
 
 
-{METODO}						{ imprimir("Método", yytext()); }
 {COMENTARIO}					{ imprimir("Comentário", yytext()); }
 {ABRE_CHAVE}					{ imprimir("Chave aberta", yytext()); }
 {FECHA_CHAVE}					{ imprimir("Chave fechada", yytext()); }
@@ -144,6 +146,10 @@ COMENTARIO = (["//"]({ANY_CHAR})*)|("/*"([^*]|\*+[^*/])*\*+"/")
 {STRING}						{ imprimir("Constante tipo string", yytext()); }
 {ANOTACAO}						{ imprimir("Anotação do java", yytext()); }
 {VIRGULA}						{ imprimir("Separador vírgula", yytext()); }
+{DESVIO_CONDICIONAL}			{ imprimir("Estrutura de desvio condicional", yytext()); }
+{LOOP}							{ imprimir("Estrutura de loop", yytext()); }
+{EXCECAO}						{ imprimir("Estrutura de exceção", yytext()); }
+{METODO}						{ imprimir("Método", yytext()); }
 {ID}                	        { imprimir("Identificador", yytext()); }
 
 . { throw new RuntimeException("Caractere inválido " + yytext()); }
