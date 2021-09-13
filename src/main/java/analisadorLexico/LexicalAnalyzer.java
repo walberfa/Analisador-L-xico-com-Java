@@ -1236,7 +1236,7 @@ class LexicalAnalyzer {
             // fall through
           case 57: break;
           case 16:
-            { imprimir("Operador ternáio", yytext());
+            { imprimir("Operador ternário", yytext());
             }
             // fall through
           case 58: break;
