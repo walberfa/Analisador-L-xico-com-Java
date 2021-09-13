@@ -806,7 +806,6 @@ class LexicalAnalyzer {
     this.writer.close();
   }
 
-
   private void imprimir(String descricao, String lexema) throws IOException {
     System.out.println(lexema + " - " + descricao);
     this.writer.append(lexema + " - " + descricao + "\n");
