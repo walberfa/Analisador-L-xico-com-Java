@@ -8,6 +8,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 // See https://github.com/jflex-de/jflex/issues/222
 @SuppressWarnings("FallThrough")
@@ -819,29 +822,55 @@ class LexicalAnalyzer {
 
   /* user code: */
   private File output;
-  private FileWriter writer;
+  private File tabelaIdentificadores;
+  private FileWriter writerOutput;
+  private FileWriter writerIdentificadores;
+  private int idCount = 0;
+  private Map<Integer, String> mapIdentifier = new HashMap<>();
 
-  public void fecharOutput() throws IOException {
-    this.writer.close();
+  public void fecharWriters() throws IOException {
+    this.writerOutput.close();
   }
 
-
+  private void imprimirId(String descricao, String lexema) throws IOException {
+    int key = this.idCount;
+	boolean exists = false;
+    for (Map.Entry<Integer, String> entry : mapIdentifier.entrySet()) {
+      if(entry.getValue().equals(lexema)) {
+		key = entry.getKey();
+		exists = true;
+		break;
+	  }
+	}
+	if (!exists) {
+	  insertId(lexema); 
+	}
+	System.out.println(lexema + " - " + "chave número " + key + " - " + descricao);
+	this.writerOutput.append(lexema + " - " + "chave número " + key + " - " +  descricao + "\n");
+	  this.writerIdentificadores.append("key " + key + ": " + lexema + "\n");
+  }
+  
   private void imprimir(String descricao, String lexema) throws IOException {
     System.out.println(lexema + " - " + descricao);
-    this.writer.append(lexema + " - " + descricao + "\n");
+    this.writerOutput.append(lexema + " - " + descricao + "\n");
+  }
+  
+  private void insertId(String nome) {
+	  mapIdentifier.put(idCount++, nome);
   }
 
   LexicalAnalyzer(java.io.Reader in, String inputname) throws IOException {
 	String rootPath = Paths.get("").toAbsolutePath().toString();
 	this.output = new File(rootPath + "\\" + inputname +" - output.txt");
+	this.tabelaIdentificadores = new File(rootPath + "\\" + inputname +" - tabela de simbolos.txt");
 	output.delete();
 	output.createNewFile();
-	this.writer = new FileWriter(this.output);
+	tabelaIdentificadores.delete();
+	tabelaIdentificadores.createNewFile();
+	this.writerOutput = new FileWriter(this.output);
+	this.writerIdentificadores = new FileWriter(this.tabelaIdentificadores);
 	this.zzReader = in;
   }
-
-
-
 
 
   /**
@@ -1175,7 +1204,7 @@ class LexicalAnalyzer {
 
       if (zzInput == YYEOF && zzStartRead == zzCurrentPos) {
         zzAtEOF = true;
-        return;
+        return ;
       }
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
@@ -1265,7 +1294,7 @@ class LexicalAnalyzer {
             // fall through
           case 62: break;
           case 18:
-            { imprimir("Identificador", yytext());
+            { imprimirId("Identificador", yytext());
             }
             // fall through
           case 63: break;
@@ -1310,7 +1339,7 @@ class LexicalAnalyzer {
             // fall through
           case 71: break;
           case 27:
-            { imprimir("Método", yytext());
+            { imprimirId("Método", yytext());
             }
             // fall through
           case 72: break;
