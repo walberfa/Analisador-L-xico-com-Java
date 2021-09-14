@@ -19,6 +19,7 @@ import java.util.Set;
 
   public void fecharWriters() throws IOException {
     this.writerOutput.close();
+    this.writerIdentificadores.close();
   }
 
   private void imprimirId(String descricao, String lexema) throws IOException {
