@@ -4,33 +4,62 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 %%
 
 %{
   private File output;
-  private FileWriter writer;
+  private File tabelaIdentificadores;
+  private FileWriter writerOutput;
+  private FileWriter writerIdentificadores;
+  private int idCount = 0;
+  private Map<Integer, String> mapIdentifier = new HashMap<>();
 
-  public void fecharOutput() throws IOException {
-    this.writer.close();
+  public void fecharWriters() throws IOException {
+    this.writerOutput.close();
   }
 
-
+  private void imprimirId(String descricao, String lexema) throws IOException {
+    int key = this.idCount;
+	boolean exists = false;
+    for (Map.Entry<Integer, String> entry : mapIdentifier.entrySet()) {
+      if(entry.getValue().equals(lexema)) {
+		key = entry.getKey();
+		exists = true;
+		break;
+	  }
+	}
+	if (!exists) {
+	  insertId(lexema); 
+	  this.writerIdentificadores.append("key " + key + ": " + lexema + "\n");
+	}
+	System.out.println(lexema + " - " + "chave número " + key + " - " + descricao);
+	this.writerOutput.append(lexema + " - " + "chave número " + key + " - " +  descricao + "\n");
+  }
+  
   private void imprimir(String descricao, String lexema) throws IOException {
     System.out.println(lexema + " - " + descricao);
-    this.writer.append(lexema + " - " + descricao + "\n");
+    this.writerOutput.append(lexema + " - " + descricao + "\n");
+  }
+  
+  private void insertId(String nome) {
+	  mapIdentifier.put(idCount++, nome);
   }
 
   LexicalAnalyzer(java.io.Reader in, String inputname) throws IOException {
 	String rootPath = Paths.get("").toAbsolutePath().toString();
 	this.output = new File(rootPath + "\\" + inputname +" - output.txt");
+	this.tabelaIdentificadores = new File(rootPath + "\\" + inputname +" - tabela de simbolos.txt");
 	output.delete();
 	output.createNewFile();
-	this.writer = new FileWriter(this.output);
+	tabelaIdentificadores.delete();
+	tabelaIdentificadores.createNewFile();
+	this.writerOutput = new FileWriter(this.output);
+	this.writerIdentificadores = new FileWriter(this.tabelaIdentificadores);
 	this.zzReader = in;
   }
-
-
-
 %}
 
 
@@ -149,7 +178,7 @@ COMENTARIO = (["//"]({ANY_CHAR})*)|("/*"([^*]|\*+[^*/])*\*+"/")
 {DESVIO_CONDICIONAL}			{ imprimir("Estrutura de desvio condicional", yytext()); }
 {LOOP}							{ imprimir("Estrutura de loop", yytext()); }
 {EXCECAO}						{ imprimir("Estrutura de exceção", yytext()); }
-{METODO}						{ imprimir("Método", yytext()); }
-{ID}                	        { imprimir("Identificador", yytext()); }
+{METODO}						{ imprimirId("Método", yytext()); }
+{ID}                	        { imprimirId("Identificador", yytext()); }
 
 . { throw new RuntimeException("Caractere inválido " + yytext()); }
