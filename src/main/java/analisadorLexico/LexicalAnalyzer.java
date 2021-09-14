@@ -830,6 +830,7 @@ class LexicalAnalyzer {
 
   public void fecharWriters() throws IOException {
     this.writerOutput.close();
+    this.writerIdentificadores.close();
   }
 
   private void imprimirId(String descricao, String lexema) throws IOException {
@@ -844,10 +845,10 @@ class LexicalAnalyzer {
 	}
 	if (!exists) {
 	  insertId(lexema); 
+	  this.writerIdentificadores.append("key " + key + ": " + lexema + "\n");
 	}
 	System.out.println(lexema + " - " + "chave número " + key + " - " + descricao);
 	this.writerOutput.append(lexema + " - " + "chave número " + key + " - " +  descricao + "\n");
-	  this.writerIdentificadores.append("key " + key + ": " + lexema + "\n");
   }
   
   private void imprimir(String descricao, String lexema) throws IOException {
