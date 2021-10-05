@@ -13,7 +13,7 @@ Projeto para a disciplina de Compiladores do curso de Ciência da Computação.
 
 - [x] Código-fonte e testes
 - [x] Relatório escrito
-- [ ] Vídeo demonstrativo 
+- [x] Vídeo demonstrativo 
 
 <h2> Como executar </h2>
 
