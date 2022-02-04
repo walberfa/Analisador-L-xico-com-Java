@@ -9,11 +9,13 @@ Projeto para a disciplina de Compiladores do curso de Ciência da Computação.
 
 - Hélio Lopes
 
+
 <h2> Partes do trabalho </h2>
 
 - [x] Código-fonte e testes
 - [x] Relatório escrito
 - [x] Vídeo demonstrativo 
+ - Assista ao vídeo no link: https://www.youtube.com/watch?v=stPsxVstRtk
 
 <h2> Como executar </h2>
 
